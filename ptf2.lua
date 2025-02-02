@@ -209,7 +209,7 @@ Lighting.Changed:Connect(function()
 		FullBrightFunc()
 	end
 	if NoFog == true then
-		
+		NoFogFunc()
 	end
 end)
 
