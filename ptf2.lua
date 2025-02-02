@@ -2,12 +2,68 @@ local library = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/
 
 local Main = library:CreateWindow("Platform Battles","Crimson")
 
+local AutoCollectRange = 16
 local AutoDodge = false
 local AutoCatch = false
 local AutoSpellCast = false
 local AutoSwordCast = false
 
+local Conversion = {
+    ["LeftArrow"] = Enum.KeyCode.A,
+    ["RightArrow"] = Enum.KeyCode.D,
+    ["UpArrow"] = Enum.KeyCode.W,
+    ["DownArrow"] = Enum.KeyCode.S,
+}
+
+local function Pickup()
+	for __,v in pairs(game.Workspace:GetChildren()) do
+		if v:IsA("MeshPart") or v:IsA("Part") or v:IsA("UnionOperation") then
+			if v:FindFirstChild("ClickDetector") then
+				if (v.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude <= AutoCollectRange then
+					fireclickdetector(v.ClickDetector)
+				end
+			end
+		end
+	end
+end
+
+local function OpenChest()
+	for __,v in pairs(game.workspace.DesertDungeon:GetDescendants()) do
+		if v.Name == "DesertChest" then
+			if v:FindFirstChild("ClickDetector") then
+				if (v.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude <= AutoCollectRange then
+					fireclickdetector(v.ClickDetector)
+				end
+			end
+		end
+	end
+end
+
 local tab = Main:CreateTab("Main")
+
+tab:CreateToggle("Auto Pickup",function(a)
+	AutoCollect = Value
+	while AutoCollect do
+	wait()
+	 pcall(function()
+		Pickup()
+	 end)
+	end
+end)
+
+tab:CreateToggle("Auto Desert Chest",function(a)
+	AutoCollect = Value
+	while AutoCollect do
+	wait()
+	 pcall(function()
+		OpenChest()
+	 end)
+	end
+end)
+
+tab:CreateSlider("Pickup Range",1,100,function(a)
+AutoCollectRange = a
+end)
 
 tab:CreateToggle("Auto Dodge",function(a)
 	AutoDodge = a
@@ -102,7 +158,14 @@ Plr.PlayerGui.ChildAdded:Connect(function(Child)
  end
  if Child.Name == "SwordAttack" and AutoSwordCast == true then
 	Child.MainFrame.ArrowFrame.ChildAdded:Connect(function(Chi)
-		Chi:Destroy()
+		while Chi do
+            wait(.1)
+            if Chi.Position.Y.Offset <= 90 then
+                game:GetService("VirtualInputManager"):SendKeyEvent(true,Conversion[Chi.Name],false,game)
+                game:GetService("VirtualInputManager"):SendKeyEvent(false,Conversion[Chi.Name],false,game)
+                break
+            end
+        end
 	end)
  end
 end)
