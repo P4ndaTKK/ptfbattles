@@ -102,7 +102,7 @@ Plr.PlayerGui.ChildAdded:Connect(function(Child)
  end
  if Child.Name == "SwordAttackFunkin" and AutoSwordCast == true then
 	local FailCounter = Child.fails
-	while Child then
+	while Child do
 	wait(.5)
 	FailCounter.Value = 0
 	end
