@@ -100,13 +100,11 @@ Plr.PlayerGui.ChildAdded:Connect(function(Child)
         game:GetService("VirtualInputManager"):SendMouseButtonEvent(X,Y, 0, false, game, 0)
 	end
  end
- if Child.Name == "SwordAttackFunkin" and AutoSwordCast == true then
-	local FailCounter = Child.fails
-	while Child do
-	wait(.1)
-	FailCounter.Value = 0
-	end
-    end
+ if Child.Name == "SwordAttack" and AutoSwordCast == true then
+	Child.MainFrame.ArrowFrame.ChildAdded:Connect(function(Chi)
+		Chi:Destroy()
+	end)
+ end
 end)
 
 tab:Show()
