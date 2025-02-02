@@ -3,11 +3,26 @@ local library = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/
 local Main = library:CreateWindow("Platform Battles","Crimson")
 
 local AutoDodge = false
+local AutoCatch = false
+local AutoSpellCast = false
+local AutoSwordCast = false
 
 local tab = Main:CreateTab("Main")
 
 tab:CreateToggle("Auto Dodge",function(a)
 	AutoDodge = a
+end)
+
+tab:CreateToggle("Auto Catch",function(a)
+	AutoCatch = a
+end)
+
+tab:CreateToggle("Auto Spellcast",function(a)
+	AutoSpellCast = a
+end)
+
+tab:CreateToggle("Auto Swordcast",function(a)
+	AutoSwordCast = a
 end)
 
 tab:CreateToggle("Disable Encounters",function(a)
@@ -48,10 +63,49 @@ Plr.PlayerGui.ChildAdded:Connect(function(Child)
             game:GetService("VirtualInputManager"):SendMouseButtonEvent(X,Y, 0, true, game, 0)
             wait()
             game:GetService("VirtualInputManager"):SendMouseButtonEvent(X,Y, 0, false, game, 0)
-            print(X..","..Y)
             break
         end
     end
+ end
+ if Child.Name == "CatchEscape" and AutoCatch == true then 
+    wait(.15)
+    Dodging = true
+    local DodgingBar = Child.DodgingBar
+    local MovingFrame = DodgingBar.MovingFrame
+	DodgingBar.HitFrameCatch.Size = UDim2.new(1,0,1,0)
+    while Dodging do
+    wait(.01)
+        if MovingFrame.Position.X.Scale <= 0.5 + DodgingBar.HitFrameCatch.Size.X.Scale / 2 and 0.5 - DodgingBar.HitFrameCatch.Size.X.Scale / 2 <= MovingFrame.Position.X.Scale then 
+            Dodging = false
+            local confirm_position = game:GetService("ReplicatedStorage").Gui.CatchEscape.DodgingBar.Catch.AbsolutePosition
+            local X = confirm_position.X + 15
+            local Y = confirm_position.Y + 65  
+            game:GetService("VirtualInputManager"):SendMouseButtonEvent(X,Y, 0, true, game, 0)
+            wait()
+            game:GetService("VirtualInputManager"):SendMouseButtonEvent(X,Y, 0, false, game, 0)
+            break
+        end
+    end
+ end
+ if Child.Name == "SpellCast" and AutoSpellCast == true then
+	wait(.5)
+	local MainFrame = Child.MainFrame
+	local Quantity = #MainFrame:GetChildren()
+	for i = 1, Quantity do
+		local position = MainFrame["Bubble"..i].AbsolutePosition
+		local X = position.X + 15
+        local Y = position.Y + 65  
+        game:GetService("VirtualInputManager"):SendMouseButtonEvent(X,Y, 0, true, game, 0)
+        wait()
+        game:GetService("VirtualInputManager"):SendMouseButtonEvent(X,Y, 0, false, game, 0)
+	end
+ end
+ if Child.Name == "SwordAttackFunkin" and AutoSwordCast == true then
+	local FailCounter = Child.fails
+	while Child then
+	wait(.5)
+	FailCounter.Value = 0
+	end
  end
 end)
 
