@@ -1,3 +1,5 @@
+local Lighting = game:GetService("Lighting")
+
 local library = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/ShaddowScripts/Main/main/Library"))()
 
 local Main = library:CreateWindow("Platform Battles","Crimson")
@@ -7,6 +9,8 @@ local AutoDodge = false
 local AutoCatch = false
 local AutoSpellCast = false
 local AutoSwordCast = false
+local NoFog = false
+local FullBright = false
 
 local Conversion = {
     ["LeftArrow"] = Enum.KeyCode.A,
@@ -14,6 +18,16 @@ local Conversion = {
     ["UpArrow"] = Enum.KeyCode.W,
     ["DownArrow"] = Enum.KeyCode.S,
 }
+
+local function FullBrightFunc()
+	Lighting.GlobalShadows = false
+	Lighting.Brightness = 10
+end
+
+local function NoFogFunc()
+	Lighting.FogEnd = 100000
+	Lighting.FogStart = 1
+end
 
 local function Pickup()
 	for __,v in pairs(game.Workspace:GetChildren()) do
@@ -40,6 +54,26 @@ local function OpenChest()
 end
 
 local tab = Main:CreateTab("Main")
+
+tab:CreateToggle("Full Bright",function(a)
+	FullBright = a
+	if FullBright == true then
+		FullBrightFunc()
+	else
+		Lighting.GlobalShadows = true
+		Lighting.Brightness = 2
+	end
+end)
+
+tab:CreateToggle("No Fog",function(a)
+	NoFog = a
+	if NoFog == true then
+		NoFogFunc()
+	else
+		Lighting.FogEnd = 600
+		Lighting.FogStart = 100
+	end
+end)
 
 tab:CreateToggle("Auto Pickup",function(a)
 	AutoCollect = Value
@@ -168,6 +202,15 @@ Plr.PlayerGui.ChildAdded:Connect(function(Child)
         end
 	end)
  end
+end)
+
+Lighting.Changed:Connect(function()
+	if FullBright == true then
+		FullBrightFunc()
+	end
+	if NoFog == true then
+		
+	end
 end)
 
 tab:Show()
