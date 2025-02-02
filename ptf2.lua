@@ -9,6 +9,7 @@ local AutoDodge = false
 local AutoCatch = false
 local AutoSpellCast = false
 local AutoSwordCast = false
+local AutoBowCast = false
 local NoFog = false
 local FullBright = false
 
@@ -95,6 +96,14 @@ tab:CreateToggle("Auto Desert Chest",function(a)
 	end
 end)
 
+tab:CreateButton("Destroy Dungeon Spawns",function()
+	for i,v in pairs(game.Workspace.DesertDungeon:GetDescendants()) do
+		if v.Name == "DesertDungeonEnemySpawn" or v.Name == "DesertDungeonLayer2EnemySpawn" then
+		v:Destroy()
+		end
+	end
+end)
+
 tab:CreateSlider("Pickup Range",1,100,function(a)
 AutoCollectRange = a
 end)
@@ -113,6 +122,10 @@ end)
 
 tab:CreateToggle("Auto Swordcast",function(a)
 	AutoSwordCast = a
+end)
+
+tab:CreateToggle("Auto Bowcast",function(a)
+	AutoBowCast = a
 end)
 
 tab:CreateToggle("Disable Encounters",function(a)
@@ -189,6 +202,20 @@ Plr.PlayerGui.ChildAdded:Connect(function(Child)
         wait()
         game:GetService("VirtualInputManager"):SendMouseButtonEvent(X,Y, 0, false, game, 0)
 	end
+ end
+ if Child.Name == "Aim" and AutoBowCast == true then
+	wait()
+	local MainFrame = Child.MainFrame
+	MainFrame.ChildAdded:Connect(function(Chi)
+		Chi.Size = UDim2.new(0,150,0,150)
+		wait(0.2)
+		local position = Chi.AbsolutePosition
+		local X = position.X + 15
+        local Y = position.Y + 65  
+        game:GetService("VirtualInputManager"):SendMouseButtonEvent(X,Y, 0, true, game, 0)
+        wait()
+        game:GetService("VirtualInputManager"):SendMouseButtonEvent(X,Y, 0, false, game, 0)
+	end)
  end
  if Child.Name == "SwordAttack" and AutoSwordCast == true then
 	Child.MainFrame.ArrowFrame.ChildAdded:Connect(function(Chi)
