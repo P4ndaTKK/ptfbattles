@@ -1,5 +1,6 @@
 local Lighting = game:GetService("Lighting")
-
+local Players = game:GetService("Players")
+local Plr = Players.LocalPlayer
 local library = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/ShaddowScripts/Main/main/Library"))()
 
 local Main = library:CreateWindow("Platform Battles","Crimson")
@@ -64,6 +65,31 @@ local function OpenChest()
 end
 
 local tab = Main:CreateTab("Main")
+
+tab:CreateToggle("Speed Boost",function(a)
+	SpeedBoost = a
+	if SpeedBoost == true then
+		local speedboosta = Instance.new("Folder") 
+		speedboosta.Name = "RunSpeedBoost"
+		local c = Instance.new("Folder") 
+		c.Name = "Chi Running"
+		local d = Instance.new("Folder") 
+		d.Name = "Beast Running"
+		speedboosta.Parent = Plr:FindFirstChild("PassiveSkills")
+		c.Parent = Plr.Character
+		d.Parent = Plr.Character
+	else
+		if Plr.PassiveSkills:FindFirstChild("RunSpeedBoost") then
+			Plr.PassiveSkills.RunSpeedBoost:Destroy()
+		end
+		if Plr.Character:FindFirstChild("Chi Running") then
+			Plr.Character["Chi Running"]:Destroy()
+		end
+		if Plr.Character:FindFirstChild("Beast Running") then
+			Plr.Character["Beast Running"]:Destroy()
+		end
+	end
+end)
 
 tab:CreateToggle("Full Bright",function(a)
 	FullBright = a
@@ -207,7 +233,7 @@ Plr.PlayerGui.ChildAdded:Connect(function(Child)
 	wait(.5)
 	local MainFrame = Child.MainFrame
 	local Quantity = #MainFrame:GetChildren()
-	for i = 1, Quantity do
+	for i = 1, Quantity-1 do
 		local position = MainFrame["Bubble"..i].AbsolutePosition
 		local X = position.X + 15
         local Y = position.Y + 65  
