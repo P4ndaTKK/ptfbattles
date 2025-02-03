@@ -12,6 +12,7 @@ local AutoSwordCast = false
 local AutoBowCast = false
 local NoFog = false
 local FullBright = false
+local AutoAxeCast = false
 
 local Conversion = {
     ["LeftArrow"] = Enum.KeyCode.A,
@@ -19,6 +20,14 @@ local Conversion = {
     ["UpArrow"] = Enum.KeyCode.W,
     ["DownArrow"] = Enum.KeyCode.S,
 }
+
+local YX = {
+	["LeftArrow"] = -96,
+    ["RightArrow"] = 96,
+    ["UpArrow"] = -96,
+    ["DownArrow"] = 96,
+}
+
 
 local function FullBrightFunc()
 	Lighting.GlobalShadows = false
@@ -124,6 +133,10 @@ tab:CreateToggle("Auto Swordcast",function(a)
 	AutoSwordCast = a
 end)
 
+tab:CreateToggle("Auto Axecast",function(a)
+	AutoAxeCast = a
+end)
+
 tab:CreateToggle("Auto Bowcast",function(a)
 	AutoBowCast = a
 end)
@@ -215,6 +228,26 @@ Plr.PlayerGui.ChildAdded:Connect(function(Child)
         game:GetService("VirtualInputManager"):SendMouseButtonEvent(X,Y, 0, true, game, 0)
         wait()
         game:GetService("VirtualInputManager"):SendMouseButtonEvent(X,Y, 0, false, game, 0)
+	end)
+ end
+ if Child.Name == "AxeAttack" and AutoAxeCast == true then
+	Child.MainFrame.ChildAdded:Connect(function(Chi)
+		while Chi do
+           wait(.1)
+		   if Chi.Name == "UpArrow" or Chi.Name == "DownArrow" then
+				if Chi.Position.Y.Offset <= YX[Chi.Name] then
+				   game:GetService("VirtualInputManager"):SendKeyEvent(true,Conversion[Chi.Name],false,game)
+				   game:GetService("VirtualInputManager"):SendKeyEvent(false,Conversion[Chi.Name],false,game)
+				   break
+				end
+			else
+				if Chi.Position.X.Offset <= YX[Chi.Name] then
+				   game:GetService("VirtualInputManager"):SendKeyEvent(true,Conversion[Chi.Name],false,game)
+				   game:GetService("VirtualInputManager"):SendKeyEvent(false,Conversion[Chi.Name],false,game)
+				   break
+				end
+			end
+		end
 	end)
  end
  if Child.Name == "SwordAttack" and AutoSwordCast == true then
