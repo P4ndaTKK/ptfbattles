@@ -14,6 +14,7 @@ local AutoBowCast = false
 local NoFog = false
 local FullBright = false
 local AutoAxeCast = false
+local AutoDaggerCast = false
 
 local Conversion = {
     ["LeftArrow"] = Enum.KeyCode.A,
@@ -69,24 +70,24 @@ local tab = Main:CreateTab("Main")
 tab:CreateToggle("Speed Boost",function(a)
 	SpeedBoost = a
 	if SpeedBoost == true then
-		local speedboosta = Instance.new("Folder") 
-		speedboosta.Name = "RunSpeedBoost"
+		local b = Instance.new("Folder") 
+		b.Name = "RunSpeedBoost"
 		local c = Instance.new("Folder") 
 		c.Name = "Chi Running"
 		local d = Instance.new("Folder") 
 		d.Name = "Beast Running"
-		speedboosta.Parent = Plr:FindFirstChild("PassiveSkills")
-		c.Parent = Plr.Character
-		d.Parent = Plr.Character
+		b.Parent = plr:FindFirstChild("PassiveSkills")
+		c.Parent = plr.Character
+		d.Parent = plr.Character
 	else
-		if Plr.PassiveSkills:FindFirstChild("RunSpeedBoost") then
-			Plr.PassiveSkills.RunSpeedBoost:Destroy()
+		if plr.PassiveSkills:FindFirstChild("RunSpeedBoost") then
+			plr.PassiveSkills.RunSpeedBoost:Destroy()
 		end
-		if Plr.Character:FindFirstChild("Chi Running") then
-			Plr.Character["Chi Running"]:Destroy()
+		if plr.Character:FindFirstChild("Chi Running") then
+			plr.Character["Chi Running"]:Destroy()
 		end
-		if Plr.Character:FindFirstChild("Beast Running") then
-			Plr.Character["Beast Running"]:Destroy()
+		if plr.Character:FindFirstChild("Beast Running") then
+			plr.Character["Beast Running"]:Destroy()
 		end
 	end
 end)
@@ -167,6 +168,10 @@ tab:CreateToggle("Auto Bowcast",function(a)
 	AutoBowCast = a
 end)
 
+tab:CreateToggle("Auto Daggercast",function(a)
+	AutoDaggerCast = a
+end)
+
 tab:CreateToggle("Disable Encounters",function(a)
 	DisableEncounter = a
 	if DisableEncounter then
@@ -198,6 +203,26 @@ Plr.PlayerGui.ChildAdded:Connect(function(Child)
     while Dodging do
     wait(.01)
         if MovingFrame.Position.X.Scale <= 0.5 + DodgingBar.HitFrameDodge.Size.X.Scale / 2 and 0.5 - DodgingBar.HitFrameDodge.Size.X.Scale / 2 <= MovingFrame.Position.X.Scale then 
+            Dodging = false
+            local confirm_position = game:GetService("ReplicatedStorage").Gui.Dodge.DodgingBar.Block.AbsolutePosition
+            local X = confirm_position.X + 15
+            local Y = confirm_position.Y + 65  
+            game:GetService("VirtualInputManager"):SendMouseButtonEvent(X,Y, 0, true, game, 0)
+            wait()
+            game:GetService("VirtualInputManager"):SendMouseButtonEvent(X,Y, 0, false, game, 0)
+            break
+        end
+    end
+ end
+ if Child.Name == "AttackDagger" and AutoDaggerCast == true then 
+    wait(.15)
+    Dodging = true
+    local DodgingBar = Child.AttackBar
+    local MovingFrame = DodgingBar.MovingFrame
+	DodgingBar.HitFrame.Size = UDim2.new(1,0,1,0)
+    while Dodging do
+    wait(.01)
+        if MovingFrame.Position.X.Scale <= 0.5 + DodgingBar.HitFrame.Size.X.Scale / 2 and 0.5 - DodgingBar.HitFrame.Size.X.Scale / 2 <= MovingFrame.Position.X.Scale then 
             Dodging = false
             local confirm_position = game:GetService("ReplicatedStorage").Gui.Dodge.DodgingBar.Block.AbsolutePosition
             local X = confirm_position.X + 15
