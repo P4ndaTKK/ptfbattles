@@ -76,18 +76,18 @@ tab:CreateToggle("Speed Boost",function(a)
 		c.Name = "Chi Running"
 		local d = Instance.new("Folder") 
 		d.Name = "Beast Running"
-		b.Parent = plr:FindFirstChild("PassiveSkills")
-		c.Parent = plr.Character
-		d.Parent = plr.Character
+		b.Parent = Plr:FindFirstChild("PassiveSkills")
+		c.Parent = Plr.Character
+		d.Parent = Plr.Character
 	else
-		if plr.PassiveSkills:FindFirstChild("RunSpeedBoost") then
-			plr.PassiveSkills.RunSpeedBoost:Destroy()
+		if Plr.PassiveSkills:FindFirstChild("RunSpeedBoost") then
+			Plr.PassiveSkills.RunSpeedBoost:Destroy()
 		end
-		if plr.Character:FindFirstChild("Chi Running") then
-			plr.Character["Chi Running"]:Destroy()
+		if Plr.Character:FindFirstChild("Chi Running") then
+			Plr.Character["Chi Running"]:Destroy()
 		end
-		if plr.Character:FindFirstChild("Beast Running") then
-			plr.Character["Beast Running"]:Destroy()
+		if Plr.Character:FindFirstChild("Beast Running") then
+			Plr.Character["Beast Running"]:Destroy()
 		end
 	end
 end)
